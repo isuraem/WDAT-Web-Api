@@ -5,13 +5,13 @@ import todoService from '../services/todoService';
 import { ITodo } from "../types/todo";
 const Logger = require('../util/logging/logger');
 import { io } from '../server';
-// const io  = require('../server');
+
 const addTodo = async (req: Request, res: Response) => {
   try {
     const todoData = req.body as Pick<ITodo, 'name' | 'description' | 'status'>;
     const todoTasks = await todoService.addTodo(todoData);
     io.emit('todoAdded', todoTasks);
-    res.status(200).json(todoTasks);
+    res.status(200).json({ success: true, showMessage: true , msg: "Adding todo",data :todoTasks });
   } catch (err: any) {
     Logger.log('addTask', `todo:${req.body.name}`,err);
     return res.status(err.status || ResponseStatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, msg: err.msg || ResponseCommonMessages.INTERNAL_SERVER_ERROR });
@@ -21,7 +21,7 @@ const deleteTodo = async (req: Request, res: Response) => {
   try {
     const id = req.body as Pick<ITodo, 'id'>;
     const deleteTasks = await todoService.deleteTodo(id);
-    return res.status(200).json({ success: true, showMessage: true });
+    return res.status(200).json({ success: true, showMessage: true , msg: "Deleted"});
 
   } catch (err: any) {
     Logger.log('deleteTask', `todo:${req.body.id}`,err);
@@ -33,7 +33,7 @@ const markTodoAsCompleted = async (req: Request, res: Response) => {
   try {
     const id = req.body as Pick<ITodo, 'id'>;
     const markedTask = await todoService.markTodoAsCompleted(id);
-    return res.status(200).json({ success: true, showMessage: true });
+    return res.status(200).json({ success: true, showMessage: true,  msg: "Todos Mark as completed" });
 
   } catch (err: any) {
     Logger.log('markTodoAsCompleted', `todo:${req.body.id}`,err);
@@ -44,7 +44,7 @@ const markTodoAsCompleted = async (req: Request, res: Response) => {
 const getAllTodos = async (req: Request, res: Response) => {
   try {
     const allTasks = await todoService.getAllTodos();
-    return res.status(200).json({ success: true, data:allTasks, showMessage: true });
+    return res.status(200).json({ success: true, data:allTasks, showMessage: true, msg: "Todos fetched"});
 
   } catch (err: any) {
     Logger.log('getAllTodos', null, err);
@@ -55,7 +55,7 @@ const updateTodoDescription = async (req: Request, res: Response) => {
   try {
     const todoData = req.body as Pick<ITodo, 'id' | 'description'>;
     const updatedTasks = await todoService.updateTodoDescription(todoData);
-    return res.status(200).json({ success: true, data:updatedTasks, showMessage: true });
+    return res.status(200).json({ success: true, data:updatedTasks, showMessage: true , msg: "Todo Updated"});
 
   } catch (err: any) {
     Logger.log('updateTodoDescription', `todo:${req.body.id}`, err);
