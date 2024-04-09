@@ -6,7 +6,6 @@ import { ResponseCommonMessages } from '../util/constants/responseCommonMessages
 export const validationsMiddleware = (schema: Schema) => {
 	return (req: Request, res: Response, next: NextFunction) => {
 		const validationResult = schema.validate(req.body);
-        console.log("body data",req.body)
 		const { error } = validationResult;
 		if (!error) {
 			next();

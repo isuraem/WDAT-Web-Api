@@ -20,7 +20,7 @@ const todoService = {
     try {
       
       if (!deleteData.id) {
-        throw new BadRequestException('Invalid id of todo');
+        throw new BadRequestException('Failed to delete TODO task');
       }
 
       await Todo.findByIdAndDelete(deleteData.id);
@@ -35,7 +35,7 @@ const todoService = {
     try {
       const todo = await Todo.findByIdAndUpdate(markToCompleteData.id, { status: true }, { new: true });
       if (!todo) {
-        throw new BadRequestException('Invalid id of todo');
+        throw new BadRequestException('Failed to update the TODO Task');
       }
     } catch (error) {
       throw error;
@@ -58,7 +58,7 @@ const todoService = {
       const todo = await Todo.findByIdAndUpdate(updatingData.id, { description: updatingData.description }, { new: true });
 
       if (!todo) {
-        throw new BadRequestException('Invalid id of todo');
+        throw new BadRequestException('Failed to update TODO Task');
       }
 
       return todo;

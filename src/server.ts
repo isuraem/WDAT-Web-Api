@@ -11,20 +11,21 @@ dotenv.config();
 app.use(bodyParser.json());
 const server = http.createServer(app);
 
+const mongoURI = process.env.DB_URI;
+const PORT = process.env.PORT || 5000;
+const whitelist = process.env.whiteListedOrigins;
+const FRONT_END_URL = process.env.FRONT_END_URL;
+
 const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000", // Adjusted this to client's origin
+      origin: `${FRONT_END_URL}`, // Adjusted this to client's origin
       methods: ["GET", "POST"]
     }
   });
 
 export { io }; // Export the io instance
 
-const mongoURI = process.env.DB_URI;
-const PORT = process.env.PORT || 5000;
-const whitelist = process.env.whiteListedOrigins;
-
-if (!PORT || !mongoURI || !whitelist) {
+if (!PORT || !mongoURI || !whitelist || !FRONT_END_URL) {
     console.error('Error: PORT , DB_URL or whitelist environment variables are not defined.');
     process.exit(1);
 }
